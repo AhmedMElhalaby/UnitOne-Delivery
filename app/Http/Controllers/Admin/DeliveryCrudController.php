@@ -9,6 +9,7 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
 use App\Http\Requests\DeliveryRequest as StoreRequest;
 use App\Http\Requests\DeliveryRequest as UpdateRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 
 class DeliveryCrudController extends CrudController
@@ -136,10 +137,8 @@ class DeliveryCrudController extends CrudController
         $distance = Input::get('distance');
         $duration = Input::get('duration');
         $price = Input::get('price');
-        $all = Input::all();
-//        return var_dump($all);
 
-        $data = array('pick_up' => $pick_up , 'deliver'=>$deliver , 'distance'=>$distance ,'duration'=>$duration, 'price'=>$price,'paid_status'=>0);
+        $data = array('user_id'=>Auth::user()->id,'pick_up' => $pick_up , 'deliver'=>$deliver , 'distance'=>$distance ,'duration'=>$duration, 'price'=>$price,'paid_status'=>0);
         try{
             $new=(new Delivery)->create($data);
             $new->save();
@@ -148,7 +147,29 @@ class DeliveryCrudController extends CrudController
             return $e;
         }
 
-        return redirect(backpack_url('delivery'));
+        return redirect('check_out');
+    }
+    public function UpdateDelev($id)
+    {
+        $data = array('paid_status'=>1);
+        $thisDel = (new Delivery)->where('id',$id)->first();
+        try{
+            $thisDel->update($data);
+        }
+        catch (Exception $e){
+            return $e;
+        }
+        return redirect('/');
+    }
+    public function DeleteDelev($id)
+    {
+        try{
+            (new Delivery)->where('id',$id)->delete();
+        }
+        catch (Exception $e){
+            return $e;
+        }
+        return redirect('/');
     }
 //    public function store(StoreRequest $request)
 //    {

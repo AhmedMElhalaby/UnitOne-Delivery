@@ -19,7 +19,7 @@ class Delivery extends Model
     protected $primaryKey = 'id';
     public $timestamps = true;
     // protected $guarded = ['id'];
-    protected $fillable = ['pick_up','deliver','distance','duration','price','paid_status'];
+    protected $fillable = ['user_id','pick_up','deliver','distance','duration','price','paid_status'];
     // protected $hidden = [];
     // protected $dates = [];
 

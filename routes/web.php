@@ -11,15 +11,17 @@
 |
 */
 
-use App\Settings;
 
-Route::get('/', function () {
-    $KMP = (new Settings)->where('id',1)->first()->value;
-    $MP = (new Settings)->where('id',2)->first()->value;
-    return view('welcome',compact('KMP','MP'));
-});
 Route::post('store','Admin\DeliveryCrudController@storeDelev');
+Route::get('paid/{id}','Admin\DeliveryCrudController@UpdateDelev');
+Route::get('delete/{id}','Admin\DeliveryCrudController@DeleteDelev');
+
 Route::group(['prefix' => 'admin', 'middleware' => ['admin'], 'namespace' => 'Admin'], function()
 {
     CRUD::resource('delivery', 'DeliveryCrudController');
 });
+
+Auth::routes();
+
+Route::get('/', 'HomeController@index')->name('home');
+Route::get('check_out', 'HomeController@checkout')->name('home');
